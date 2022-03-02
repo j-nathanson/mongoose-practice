@@ -19,14 +19,12 @@ connect.then(() => {
 
     console.log('Connected correctly to server');
 
-    // create a new document from the model and hard code in values to properties
-    const newCampsite = new Campsite({
+    // Attempt to create a new document from the model and hard code in values to properties. Automatically saves it to db
+    Campsite.create({
         name: 'React Lake Campground',
         description: 'test'
-    });
-
-    // attempt to save to the database, return a promise
-    newCampsite.save()
+    })
+        // attempt to save to the database, return a promise
         .then(campsite => {
             // log what has been saved
             console.log(campsite);
