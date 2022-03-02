@@ -5,8 +5,30 @@ const Schema = mongoose.Schema;
 
 // schema represents the structure of a particular document, either completely or just a portion of the document
 
+// new schema for documents storing comments data for a specific campsite. doc within a doc. objects within an object
+const commentSchema = new Schema({
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        required: true
+    },
+    text: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true
+});
+
+
+
 // creating a stucture for the 'campsite' document
-// each doc required to have 2 properties, no 2 docs can have the same name
+// each doc required to have 3 properties, no 2 docs can have the same name. campsites can have comments property to store the comments in an array. Comments added must follow this stucture
 const campsiteSchema = new Schema({
     name: {
         type: String,
@@ -16,7 +38,8 @@ const campsiteSchema = new Schema({
     description: {
         type: String,
         required: true
-    }
+    },
+    comments: [commentSchema]
 }, {
     // auto add 2 properties to schema createdApp updatedApp properties managed by mongoose
     timestamps: true

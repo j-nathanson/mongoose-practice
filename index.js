@@ -10,6 +10,7 @@ const url = 'mongodb://localhost:27017/nucampsite';
 // returns a promise
 const connect = mongoose.connect(url, {
     useCreateIndex: true,
+    useFindAndModify: false,
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -28,12 +29,32 @@ connect.then(() => {
         .then(campsite => {
             // log what has been saved
             console.log(campsite);
-            // attempt to display all of the docs based on this model return promise
-            return Campsite.find();
+
+
+            // attempt to update the campsite by id, the property to update, new:true. returns the new updated doc
+            return Campsite.findByIdAndUpdate(campsite._id, {
+                $set: { description: 'Updated Test Document' }
+            }, {
+                new: true
+            });
         })
-        .then(campsites => {
+        // from the new updated document
+        .then(campsite => {
+            console.log(campsite);
+
+            // find the subdocument and can push and object to the array
+            campsite.comments.push({
+                rating: 5,
+                text: 'What a magnificent view!',
+                author: 'Tinus Lorvaldes'
+            });
+
+            // attempt to save/update
+            return campsite.save();
+        })
+        .then(campsite => {
             // if successful return the array of objects
-            console.log(campsites);
+            console.log(campsite);
             // attempt to delete all documents that are based on this model
             return Campsite.deleteMany();
         })
